@@ -2,6 +2,7 @@ package handlers_test
 
 import (
 	"ichnaea-server/handlers"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -9,7 +10,7 @@ import (
 
 func TestListHello(t *testing.T) {
 	expected := "ichnaea server is live!\n"
-	
+
 	req, err := http.NewRequest(http.MethodGet, "/", nil)
 	if err != nil {
 		t.Fatalf("could not create request: %v", err)
@@ -19,9 +20,13 @@ func TestListHello(t *testing.T) {
 	handler := http.HandlerFunc(handlers.ListHello)
 	handler.ServeHTTP(rr, req)
 
-	// assert
-	if status := rr.Code; status != http.StatusOK {
-		t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusOK)
+	log.Printf("handler: %v\n", handler)
+	log.Printf("rr.Code: %v\n", rr.Code)
+	log.Printf("rr.Body.String(): %v\n", rr.Body.String())
+
+	// assertions
+	if rr.Code != http.StatusOK {
+		t.Errorf("handler returned wrong status code: got %v want %v", rr.Code, http.StatusOK)
 	}
 
 	
